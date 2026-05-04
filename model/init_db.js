@@ -22,7 +22,9 @@ function init_db() {
             for (var i = 0; i < users.length; i ++) {
                 var u = users[i];
                 var crypto = require('crypto');
-                var hash = crypto.createHash('sha256').update(u.password).digest('hex');
+                var salt = crypto.randomBytes(16).toString('hex');
+                var hash = crypto.pbkdf2Sync(u.password, salt, 100000, 64, 'sha512').toString('hex');
+                var encryptedPassword = salt + ':' + hash;
                 db.one('INSERT INTO users(name, password) values($1, $2)', [u.username, hash])
                     .then(function ()
                         // success;
