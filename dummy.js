@@ -17,13 +17,13 @@ var dummy_info = {
     {
       "name": "My public privacy",
       "description": "Grant privacy in public to watch your favorite programs",
-      "price": parseInt(Math.random() * 100),
+      "price": parseInt(crypto.randomBytes(4).readUInt32BE(0) % 100),
       "image": "product_1.jpg"
     },
     {
       "name": "The USB rocket",
       "description": "Be happy with your USB rocket. Functionality: none. Usability: none. The best choice!",
-      "price": parseInt(Math.random() * 100),
+      "price": parseInt(crypto.randomBytes(4).readUInt32BE(0) % 100),
       "image": "product_2.jpg"
     },
     {
