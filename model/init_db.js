@@ -12,7 +12,7 @@ function init_db() {
     var db = pgp(config.db.connectionString);
 
     // Create init tables
-    db.one('CREATE TABLE users(name VARCHAR(100) PRIMARY KEY, password VARCHAR(50));')
+    db.one('CREATE TABLE users(name VARCHAR(100) PRIMARY KEY, password VARCHAR(255));')
         .then(function () {
         })
         .catch(function (err) {
@@ -21,8 +21,10 @@ function init_db() {
             var users = dummy.users;
             for (var i = 0; i < users.length; i ++) {
                 var u = users[i];
-                db.one('INSERT INTO users(name, password) values($1, $2)', [u.username, u.password])
-                    .then(function () {
+                var crypto = require('crypto');
+                var hash = crypto.createHash('sha256').update(u.password).digest('hex');
+                db.one('INSERT INTO users(name, password) values($1, $2)', [u.username, hash])
+                    .then(function ()
                         // success;
                     })
                     .catch(function (err) {
